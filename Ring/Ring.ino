@@ -13,14 +13,14 @@ Adafruit_NeoPixel strip(NUM_LEDS, RING_PIN, NEO_GRB + NEO_KHZ800);
 struct RingPixels : public VerticalStrand {
   RingPixels() : VerticalStrand(NUM_LEDS) {}
 
-  void doSetColor(int i, uint8_t red, uint8_t green, uint8_t blue, uint8_t /*alpha*/) final {
-    strip.setPixelColor(i, red, green, blue);       
+  void doSetColor(int i, RgbaColor color) final {
+    strip.setPixelColor(i, color.red, color.green, color.blue);       
   };  
 } pixels;
 
 Esp8266Network network("FISHLIGHT", "155155155");
 //Esp8266Network network("detour", "thebeatenpath");
-NetworkPlayer player(network);
+NetworkPlayer player(pixels, network);
 
 void setup()
 {
@@ -39,9 +39,6 @@ void setup()
   pinMode(STATUS_PIN, OUTPUT);
   pinMode(RING_PIN, OUTPUT);
   pinMode(BUTTON_PIN, INPUT);
-
-  delay(2000);
-  player.begin(pixels);
 }
 
 void loop()
