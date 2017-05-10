@@ -1,0 +1,6 @@
+image: unisparks/ubuntu
+
+build:
+  stage: build
+  script:
+    - make all 

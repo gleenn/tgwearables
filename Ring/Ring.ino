@@ -1,7 +1,7 @@
-#include <WiFiUdp.h>
 #include <Adafruit_NeoPixel.h>
-#include <DFSparks.h>
-using namespace dfsparks;
+#include <Unisparks.h>
+
+using namespace unisparks; 
 
 const int STATUS_PIN = 2; // builtin led
 const int RING_PIN = 5; // D1
@@ -10,17 +10,15 @@ const int NUM_LEDS = 12;
 
 Adafruit_NeoPixel strip(NUM_LEDS, RING_PIN, NEO_GRB + NEO_KHZ800);
 
-struct RingPixels : public VerticalStrand {
-  RingPixels() : VerticalStrand(NUM_LEDS) {}
-
-  void doSetColor(int i, RgbaColor color) final {
+void renderPixel(int i, DFSparks_Color color, void*) 
+{
     strip.setPixelColor(i, color.red, color.green, color.blue);       
-  };  
-} pixels;
+}
 
-Esp8266Network network("FISHLIGHT", "155155155");
-//Esp8266Network network("detour", "thebeatenpath");
-NetworkPlayer player(pixels, network);
+//Unisparks_Esp8266Network network("detour", "thebeatenpath");
+Unisparks_Esp8266Network network("FISHLIGHT", "155155155");
+Unisparks_PixelMatrix pixels(NUM_LEDS, 1, renderPixel);
+Unisparks_Player player(pixels, network);
 
 void setup()
 {

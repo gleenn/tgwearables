@@ -8,9 +8,9 @@
 #define FASTLED_ESP8266_RAW_PIN_ORDER
 #define ESP8266
 #include <FastLED.h>
-#include <DFSparks.h>
+#include <Unisparks.h>
 
-using namespace dfsparks;
+using namespace unisparks;
 
 
 // Data output to LEDs is on pin 5
@@ -128,18 +128,12 @@ const int pixelMap[] = {
 
 #endif
 
-struct VestPixels : public PixelMap {
-  VestPixels() : PixelMap(MATRIX_WIDTH, MATRIX_HEIGHT, LEDNUM, pixelMap, true) {
-  }
+CRGB leds[MATRIX_WIDTH*MATRIX_HEIGHT]; 
 
-  void doSetColor(int i,RgbaColor color) final {
-    leds[i] = CRGB(color.red, color.green, color.blue);       
-  } 
-
-  CRGB leds[MATRIX_WIDTH*MATRIX_HEIGHT]; 
-  
-} pixels;
-
+void renderPixel(int i, RgbaColor color, void*) 
+{
+    leds[i] = CRGB(color.red, color.green, color.blue);
+}
 
 uint8_t currentBrightness = STARTBRIGHTNESS;
 unsigned long buttonEvents[NUMBUTTONS];
@@ -149,6 +143,7 @@ uint8_t buttonPins[NUMBUTTONS] = {MODEBUTTON, BRIGHTNESSBUTTON, WIFIBUTTON};
 
 Esp8266Network network("FISHLIGHT", "155155155");
 //Esp8266Network network("detour", "thebeatenpath");
+PixelMap pixels(MATRIX_WIDTH, MATRIX_HEIGHT, LEDNUM, renderPixel, pixelMap, true); 
 NetworkPlayer player(pixels, network);
 
 void updateButtons(uint32_t currentMillis) {
@@ -252,13 +247,12 @@ void setup() {
   pinMode(WIFIBUTTON, INPUT_PULLUP);
 
   // Write FastLED configuration data
-  FastLED.addLeds<CHIPSET, LED_PIN, COLOR_ORDER>(pixels.leds, sizeof(pixels.leds)/sizeof(*pixels.leds));
+  FastLED.addLeds<CHIPSET, LED_PIN, COLOR_ORDER>(leds, sizeof(leds)/sizeof(*leds));
   FastLED.setBrightness(scale8(currentBrightness, MAXBRIGHTNESS));
 }
 
 
-void loop()
-{
+void loop() {
   uint32_t currentMillis = millis();
   updateButtons(currentMillis); // read, debounce, and process the buttons
   doButtons(player); // perform actions based on button state
