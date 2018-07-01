@@ -1,11 +1,9 @@
-# DiscoFish Wearables
-
-[![build status](https://gitlab.com/discofish/dfwearables/badges/master/build.svg)](https://gitlab.com/discofish/dfwearables/commits/master)
+# TechnoGecko Wearables
 
 
 ### Compiling with Arduino IDE
 
-Install Arduino IDE and required libraries (Unisparks, FastLED, Adafruit_NeoPixel):
+Install Arduino IDE and required libraries (Unisparks, FastLED):
 
     Download latest software from https://www.arduino.cc/en/Main/Softwarea
       https://www.arduino.cc/download_handler.php?f=/arduino-1.6.10-linux64.tar.xz
@@ -36,26 +34,3 @@ To compile:
 You can use extras/test-server.py to test how your device
 synchronizes with the server.
 
-
-## Uploading sketches on OSX
-
-(this is generic stuff not specific to DFSparks library)
-
-To upload sketches to ESP8266 board from Arduino IDE on OSX:
-
-	1. Install ESP8266 board. Go to Arduino->Preferences->Settings; Additional board manager URLs
-	2. Add http://arduino.esp8266.com/stable/package_esp8266com_index.json
-	3. Install ESP8266 board
-	4. Install USB to UART drivers. Required drivers seem to be different for different 
-	   board flavours. 
-	   - For LoLin boards this worked: 
-			http://www.codenuke.net/2015/01/nodemcu-install-ch340-usb-to-serial-for-yosemite.html
-	   - For noname board I got from Amazon this worked: 
-			https://www.silabs.com/products/mcu/Pages/USBtoUARTBridgeVCPDrivers.aspx (/dev/cu.SLAB_USBtoUART)
-	5. Use NodeMCU 1.0 (ESP-12E) board and port corresponding to USB driver
-	6. Set serial monitor to 115200 baud
-
-
-### Testing
-
-(use Unisparks demo or test server)
